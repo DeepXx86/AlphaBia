@@ -2,7 +2,7 @@
 
 A Makruk (Thai chess) engine trained from zero by AlphaZero-style self-play, on a single RTX 4060 at home.
 
-This is a hobby project. I wanted to see how far a normal gaming PC can push a variant that has almost no neural engines. Turns out: pretty far. The engine learned everything from self-play only - no opening books, no human games, no handcrafted eval.
+This is a hobby project. I wanted to see how far a normal gaming PC can push a variant that has almost no neural engines.
 
 ## Credits
 
