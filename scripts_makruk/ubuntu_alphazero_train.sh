@@ -5,6 +5,7 @@ MODEL_KIND="${4:-b10c128}"; TRAIN_NAME="${5:-az}"; BASE="${6:-/root/mk}"
 
 WIN=/mnt/e/Desktop/Tools/LearnLanguage/cpp/Makruk
 KATAGO=/root/makruk/cpp/build_cuda/katago
+[ -x /root/makruk/cpp/build_trt/katago ] && KATAGO=/root/makruk/cpp/build_trt/katago
 T=$BASE/scripts/alphabia/trainsgd
 CFG=$BASE/scripts_makruk/makruk_selfplay_alphazero.cfg
 export PATH=/root/mktorch/bin:$PATH

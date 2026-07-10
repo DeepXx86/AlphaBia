@@ -30,9 +30,9 @@ Btw **Claude** helped me a lot throughout this project :)
 
 ## The model
 
-There is one model in the [releases](../../releases): **model_192** (b15c192). It was trained on my RTX 4060 for roughly 50-70 hours of self-play. It beats Fairy-Stockfish makruk at low skill levels and holds its own a bit above that. Endgame conversion under the counting rule is the hard part and it is still improving.
+There is one model in the [releases](../../releases): **model_192** ``b15c192``. It was trained on my RTX 4060 for roughly 50-70 hours of self-play. It beats Fairy-Stockfish makruk at low skill levels and holds its own a bit above that. Endgame conversion under the counting rule is the hard part and it is still improving.
 
-If you want to continue training, my honest recommendation: don't keep growing this net - start a **b20c256** and train it on data generated with model_192 (or its own self-play). The bigger net has a much higher ceiling. Expect around **2-3 days** on similar hardware before it reaches the level of the model I'm giving you, and it climbs past it from there.
+If you want to continue training, my honest recommendation: don't keep growing this net - start a ``b20c256`` and train it on data generated with model_192 (or its own self-play). The bigger net has a much higher ceiling. Expect around **2-3 days** on similar hardware before it reaches the level of the model I'm giving you, and it climbs past it from there.
 
 ## Building
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 MK="${1:-/root/mk192}"
 CSV="$MK/train_progress.csv"
-STDOUT="$MK/data/train/az192/stdout.txt"
+STDOUT=$(ls -t "$MK"/data/train/*/stdout.txt 2>/dev/null | head -1)
 
 [ -f "$CSV" ] || echo "timestamp,step,p0loss,vloss" > "$CSV"
 
