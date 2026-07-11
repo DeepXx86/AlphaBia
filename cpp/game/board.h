@@ -226,6 +226,8 @@ struct Board
   bool setFEN(std::string fen);
   std::string getFEN() const;
 
+  void setMovenumslc(int n);
+
   static Board parseBoard(int xSize, int ySize, const std::string& s);
   static Board parseBoard(int xSize, int ySize, const std::string& s, char lineDelimiter);
   static void printBoard(std::ostream& out, const Board& board, Loc markLoc, const std::vector<Move>* hist);

@@ -23,6 +23,10 @@ struct PlaySettings {
   int cheapSearchVisits;
   float cheapSearchTargetWeight;
 
+  int endgameFullSearchPieces;
+  double endgameVisitsBoost;
+  double endgameCountCurriculumProb;
+
   //Attenuate the number of visits used in positions where one player or the other is extremely winning
   bool reduceVisits;
   double reduceVisitsThreshold; //When mcts value is more extreme than this

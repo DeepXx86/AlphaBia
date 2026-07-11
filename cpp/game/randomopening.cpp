@@ -15,7 +15,7 @@ void RandomOpening::initializeRandomOpening(
   BoardHistory& hist,
   Player& nextPlayer,
   Rand& gameRand,
-  const PlaySettings&) {
+  const PlaySettings& playSettings) {
 
   const int xs = board.x_size;
   const int ys = board.y_size;
@@ -91,6 +91,15 @@ void RandomOpening::initializeRandomOpening(
       continue;
     if(!GameLogic::hasAnyLegalMove(b, pla))
       continue;
+
+    if(playSettings.endgameCountCurriculumProb > 0.0 &&
+       gameRand.nextBool(playSettings.endgameCountCurriculumProb)) {
+      GameLogic::MakrukCountState count = GameLogic::getMakrukCountState(b);
+      if(count.active && count.limitPlies >= 4) {
+        int used = (int)gameRand.nextUInt((uint32_t)(count.limitPlies - 2));
+        b.setMovenumslc(used);
+      }
+    }
 
     board = b;
     nextPlayer = pla;

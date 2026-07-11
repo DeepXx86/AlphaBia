@@ -281,6 +281,54 @@ static int makrukCountingLimitMoves(const Board& board, Player attacker) {
   return 0;
 }
 
+GameLogic::MakrukCountState GameLogic::getMakrukCountState(const Board& board) {
+  MakrukCountState state;
+  state.usedPlies = board.movenumslc;
+
+  if(board.numStonesOnBoard() == 2) {
+    state.active = true;
+    state.loneKingCount = true;
+    return state;
+  }
+
+  Player loneSide = C_WALL;
+  if(board.numPlaStonesOnBoard(P_BLACK) == 1)
+    loneSide = P_BLACK;
+  else if(board.numPlaStonesOnBoard(P_WHITE) == 1)
+    loneSide = P_WHITE;
+
+  if(loneSide != C_WALL) {
+    state.active = true;
+    state.loneKingCount = true;
+    state.countedSide = loneSide;
+    int limitMoves = makrukCountingLimitMoves(board, getOpp(loneSide));
+    state.countClass = limitMoves;
+    if(limitMoves == 0)
+      return state;
+    int limitPlies = 2 * (limitMoves - board.numStonesOnBoard());
+    if(limitPlies <= 0)
+      return state;
+    state.limitPlies = limitPlies;
+    state.remainingPlies = std::max(0, limitPlies - state.usedPlies);
+    return state;
+  }
+
+  bool anyBia = false;
+  for(int y = 0; y < board.y_size && !anyBia; y++)
+    for(int x = 0; x < board.x_size; x++) {
+      Color c = board.colors[Location::getLoc(x, y, board.x_size)];
+      if(c != C_EMPTY && c != C_WALL && getPieceType(c) == C_BIA) { anyBia = true; break; }
+    }
+  if(!anyBia) {
+    state.active = true;
+    state.loneKingCount = false;
+    state.countClass = 128;
+    state.limitPlies = 128;
+    state.remainingPlies = std::max(0, 128 - state.usedPlies);
+  }
+  return state;
+}
+
 Color GameLogic::checkWinnerAfterPlayed(
   const Board& board, const BoardHistory& hist, Player pla, Loc loc) {
   if(loc == Board::PASS_LOC)
@@ -315,34 +363,10 @@ Color GameLogic::checkWinnerAfterPlayed(
   if(hist.rules.maxmovesNoCapture != 0 && hist.rules.maxmovesNoCapture <= board.movenumslc)
     return C_EMPTY;
 
-  if(board.numStonesOnBoard() == 2)
-    return C_EMPTY;
-
-
   {
-    Player loneSide = C_WALL;
-    if(board.numPlaStonesOnBoard(P_BLACK) == 1)
-      loneSide = P_BLACK;
-    else if(board.numPlaStonesOnBoard(P_WHITE) == 1)
-      loneSide = P_WHITE;
-    if(loneSide != C_WALL) {
-      int limitMoves = makrukCountingLimitMoves(board, getOpp(loneSide));
-      if(limitMoves == 0)
-        return C_EMPTY;  
-      int limitPlies = 2 * (limitMoves - board.numStonesOnBoard());
-      if(limitPlies <= 0 || board.movenumslc >= limitPlies)
-        return C_EMPTY;  
-    }
-    else {
-      bool anyBia = false;
-      for(int y = 0; y < board.y_size && !anyBia; y++)
-        for(int x = 0; x < board.x_size; x++) {
-          Color c = board.colors[Location::getLoc(x, y, board.x_size)];
-          if(c != C_EMPTY && c != C_WALL && getPieceType(c) == C_BIA) { anyBia = true; break; }
-        }
-      if(!anyBia && board.movenumslc >= 128)
-        return C_EMPTY; 
-    }
+    MakrukCountState count = getMakrukCountState(board);
+    if(count.active && count.remainingPlies <= 0)
+      return C_EMPTY;
   }
 
   return C_WALL;

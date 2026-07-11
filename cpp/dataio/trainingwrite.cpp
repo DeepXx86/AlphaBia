@@ -307,8 +307,8 @@ void TrainingWriteBuffers::addRow(
   Rand& rand
 ) {
   (void)finalBoard;
-  static_assert(NNModelVersion::latestInputsVersionImplemented == 201, "");
-  if((inputsVersion < 3 || inputsVersion > 7)&&(inputsVersion!=201))
+  static_assert(NNModelVersion::latestInputsVersionImplemented == 202, "");
+  if((inputsVersion < 3 || inputsVersion > 7)&&(inputsVersion!=201)&&(inputsVersion!=202))
     throw StringError("Training write buffers: Does not support input version: " + Global::intToString(inputsVersion));
 
   int posArea = dataXLen*dataYLen;
@@ -325,7 +325,7 @@ void TrainingWriteBuffers::addRow(
     bool inputsUseNHWC = false;
     float* rowBin = binaryInputNCHWUnpacked;
     float* rowGlobal = globalInputNC.data + curRows * numGlobalChannels;
-    static_assert(NNModelVersion::latestInputsVersionImplemented == 201, "");
+    static_assert(NNModelVersion::latestInputsVersionImplemented == 202, "");
     if(inputsVersion == 7) {
       assert(NNInputs::NUM_FEATURES_SPATIAL_V7 == numBinaryChannels);
       assert(NNInputs::NUM_FEATURES_GLOBAL_V7 == numGlobalChannels);
@@ -335,6 +335,11 @@ void TrainingWriteBuffers::addRow(
       assert(NNInputs::NUM_FEATURES_SPATIAL_V201 == numBinaryChannels);
       assert(NNInputs::NUM_FEATURES_GLOBAL_V201 == numGlobalChannels);
       NNInputs::fillRowV201(board, hist, nextPlayer, nnInputParams, dataXLen, dataYLen, inputsUseNHWC, rowBin, rowGlobal);
+    }
+    else if(inputsVersion == 202) {
+      assert(NNInputs::NUM_FEATURES_SPATIAL_V202 == numBinaryChannels);
+      assert(NNInputs::NUM_FEATURES_GLOBAL_V202 == numGlobalChannels);
+      NNInputs::fillRowV202(board, hist, nextPlayer, nnInputParams, dataXLen, dataYLen, inputsUseNHWC, rowBin, rowGlobal);
     }
     else
       ASSERT_UNREACHABLE;
@@ -663,7 +668,7 @@ TrainingDataWriter::TrainingDataWriter(const string& outDir, ostream* dbgOut, in
   int numGlobalChannels;
   //Note that this inputsVersion is for data writing, it might be different than the inputsVersion used
   //to feed into a model during selfplay
-  static_assert(NNModelVersion::latestInputsVersionImplemented == 201, "");
+  static_assert(NNModelVersion::latestInputsVersionImplemented == 202, "");
   if(inputsVersion == 7) {
     numBinaryChannels = NNInputs::NUM_FEATURES_SPATIAL_V7;
     numGlobalChannels = NNInputs::NUM_FEATURES_GLOBAL_V7;
@@ -671,6 +676,10 @@ TrainingDataWriter::TrainingDataWriter(const string& outDir, ostream* dbgOut, in
   else if(inputsVersion == 201) {
     numBinaryChannels = NNInputs::NUM_FEATURES_SPATIAL_V201;
     numGlobalChannels = NNInputs::NUM_FEATURES_GLOBAL_V201;
+  }
+  else if(inputsVersion == 202) {
+    numBinaryChannels = NNInputs::NUM_FEATURES_SPATIAL_V202;
+    numGlobalChannels = NNInputs::NUM_FEATURES_GLOBAL_V202;
   }
   else {
     throw StringError("TrainingDataWriter: Unsupported inputs version: " + Global::intToString(inputsVersion));

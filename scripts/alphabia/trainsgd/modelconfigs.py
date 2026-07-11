@@ -17,6 +17,7 @@ ModelConfig = Dict[str,Any]
 # version = 11 # V7 features, New architectures!
 
 # version = 102 # V102 features, 32 bf and 48 gf
+# version = 202 # V201 features + explicit Makruk counting-rule globals (channels 32-49); same tensor shapes as 201
 
 def get_version(config: ModelConfig):
   return config["version"]
@@ -27,7 +28,7 @@ def get_num_bin_input_features(config: ModelConfig):
     return 40
   elif version == 102:
     return 32
-  elif version == 201:
+  elif version == 201 or version == 202:
     return 48
   else:
     assert(False)
@@ -38,7 +39,7 @@ def get_num_global_input_features(config: ModelConfig):
     return 28
   elif version == 102:
     return 48
-  elif version == 201:
+  elif version == 201 or version == 202:
     return 64
   else:
     assert(False)

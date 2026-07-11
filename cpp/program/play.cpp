@@ -8,6 +8,7 @@
 #include "../search/asyncbot.h"
 #include "../search/searchnode.h"
 #include "../dataio/files.h"
+#include "../game/gamelogic.h"
 #include "../game/randomopening.h"
 
 #include "../core/test.h"
@@ -958,6 +959,25 @@ static SearchLimitsThisMove getSearchLimitsThisMove(
     cheapSearchProb *= 0.5;
   }
 
+  {
+    const Board& rootBoard = toMoveBot->getRootBoard();
+    bool endgameCritical = false;
+    GameLogic::MakrukCountState count = GameLogic::getMakrukCountState(rootBoard);
+    if(count.active)
+      endgameCritical = true;
+    else if(playSettings.endgameFullSearchPieces > 0 &&
+            rootBoard.numStonesOnBoard() <= playSettings.endgameFullSearchPieces)
+      endgameCritical = true;
+    if(endgameCritical) {
+      cheapSearchProb = 0.0;
+      if(playSettings.endgameVisitsBoost > 1.0) {
+        doAlterVisitsPlayouts = true;
+        double cap = (double)((int64_t)1L << 50);
+        numAlterVisits = (int64_t)ceil(std::min(cap, numAlterVisits * playSettings.endgameVisitsBoost));
+        numAlterPlayouts = (int64_t)ceil(std::min(cap, numAlterPlayouts * playSettings.endgameVisitsBoost));
+      }
+    }
+  }
 
   if(hintLoc == Board::NULL_LOC && cheapSearchProb > 0.0 && gameRand.nextBool(cheapSearchProb)) {
     if(playSettings.cheapSearchVisits <= 0)

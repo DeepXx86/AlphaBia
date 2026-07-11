@@ -17,6 +17,9 @@ def engine_sq_to_std(coord):
     r = int(coord[1])
     return f"{coord[0]}{9 - r}" if 1 <= r <= 8 else None
 
+# rank flip 9-r is its own inverse, so std->engine is the same transform
+std_sq_to_engine = engine_sq_to_std
+
 class Gtp:
     def __init__(self, argv):
         self.p = subprocess.Popen(argv, stdin=PIPE, stdout=PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1)
@@ -113,8 +116,8 @@ def play_game(kata, fsf, cfg_visits, kata_white, movetime, max_plies):
             break
         raw = ""
         if turn == kata_side:
-            eb, es = std_fen_to_engine(fen)
-            kata.cmd(f"setfen {eb} {es}")
+            # No setfen here: KataGo keeps its own continuous board so movenumslc,
+            # counting state, and repetition history survive across turns.
             frm = kata.cmd("genmove b"); to = kata.cmd("genmove b")
             raw = f"{frm} {to}"
             cand = (engine_sq_to_std(frm) or "") + (engine_sq_to_std(to) or "")
@@ -130,6 +133,13 @@ def play_game(kata, fsf, cfg_visits, kata_white, movetime, max_plies):
             if mv == "(none)":
                 result = ("draw", "fsf no move"); break
             raw = mv
+            ef, et = std_sq_to_engine(mv[:2]), std_sq_to_engine(mv[2:4])
+            if ef is None or et is None:
+                result = ("draw", f"HARNESS_ERROR bad FSF move format {mv}"); break
+            try:
+                kata.cmd(f"play b {ef}"); kata.cmd(f"play b {et}")
+            except RuntimeError as e:
+                result = ("draw", f"DESYNC kata rejected FSF move {mv}: {e}"); break
             moves.append(mv)
         fen_a, turn_a, chk_a = fsf.fen_turn_check(moves)
         trace.append({"ply": ply, "turn": turn, "move": moves[-1], "raw": raw, "legal": True,
@@ -199,6 +209,7 @@ def main():
     pgn_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "games")
     fsf_name = f"FairyStockfish(skill{a.fsf_skill})"
     score = {"kata": 0.0, "fsf": 0.0}
+    results = []
     for g in range(a.games):
         kata = Gtp([a.katago, "gtp", "-config", a.config, "-model", model])
         fsf = Uci(a.fsf, skill=a.fsf_skill)
@@ -209,6 +220,7 @@ def main():
         os.makedirs(pgn_dir, exist_ok=True)
         with open(os.path.join(pgn_dir, f"game{g+1}_trace.json"), "w") as tf:
             _json.dump({"result": who, "reason": why, "plies": trace}, tf, indent=1)
+        results.append((who, why))
         if who == "kata": score["kata"] += 1
         elif who == "fsf": score["fsf"] += 1
         else: score["kata"] += 0.5; score["fsf"] += 0.5
@@ -224,6 +236,24 @@ def main():
             print("   >>> ILLEGAL MOVE from the net on a correct board = it's the NET, not the web bridge.")
     print(f"\nFINAL  KataGo {score['kata']} - {score['fsf']} Fairy-Stockfish (skill {a.fsf_skill})")
     print(f"PGNs saved in: {pgn_dir}")
+
+    # Append a machine-readable summary for the training dashboard
+    hist_csv = os.path.join(os.path.dirname(os.path.abspath(__file__)), "eval_history.csv")
+    kata_mates = sum(1 for w, y in results if w == "kata" and y == "checkmate")
+    fsf_mates = sum(1 for w, y in results if w == "fsf" and y == "checkmate")
+    count_draws = sum(1 for w, y in results if y.startswith("count_draw"))
+    cap_draws = sum(1 for w, y in results if y.startswith("max_move_draw"))
+    other = len(results) - kata_mates - fsf_mates - count_draws - cap_draws
+    new_file = not os.path.exists(hist_csv)
+    with open(hist_csv, "a") as hf:
+        if new_file:
+            hf.write("timestamp,model,skill,visits,games,kata_pts,fsf_pts,"
+                     "kata_mates,fsf_mates,count_draws,cap_draws,other\n")
+        ts = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        hf.write(f"{ts},{os.path.basename(os.path.dirname(model))},{a.fsf_skill},{a.visits},"
+                 f"{len(results)},{score['kata']},{score['fsf']},"
+                 f"{kata_mates},{fsf_mates},{count_draws},{cap_draws},{other}\n")
+    print(f"Eval history appended: {hist_csv}")
 
 if __name__ == "__main__":
     main()

@@ -45,5 +45,7 @@ for g in $(seq 1 "$GENS"); do
   NEWEST=$(ls -t "$BASE/data/models" 2>/dev/null | grep "^$TRAIN_NAME-" | head -1)
   [ -n "$NEWEST" ] && cp -ru "$BASE/data/models/$NEWEST" "$WIN/local_models_$TRAIN_NAME/" 2>/dev/null || true
   bash "$WIN/src/scripts_makruk/train_tracker.sh" "$BASE" >/dev/null 2>&1 || true
+  python3 "$WIN/src/scripts_makruk/make_dashboard.py" --base "$BASE" \
+    --eval-csv "$WIN/test/eval_history.csv" --out "$WIN/dashboard.html" >/dev/null 2>&1 || true
 done
 echo "AZ_DONE"

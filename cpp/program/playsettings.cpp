@@ -10,6 +10,7 @@ PlaySettings::PlaySettings()
     randomInitPieceDensity(0.02),
     randomMovePieceRate(0.5),
    cheapSearchProb(0),cheapSearchVisits(0),cheapSearchTargetWeight(0.0f),
+   endgameFullSearchPieces(0),endgameVisitsBoost(1.0),endgameCountCurriculumProb(0.0),
    reduceVisits(false),reduceVisitsThreshold(100.0),reduceVisitsThresholdLookback(1),reducedVisitsMin(0),reducedVisitsWeight(1.0f),
    policySurpriseDataWeight(0.0),valueSurpriseDataWeight(0.0),scaleDataWeight(1.0),
    recordTreePositions(false),recordTreeThreshold(0),recordTreeTargetWeight(0.0f),
@@ -73,6 +74,12 @@ PlaySettings PlaySettings::loadForSelfplay(ConfigParser& cfg) {
   playSettings.cheapSearchProb = cfg.getDouble("cheapSearchProb",0.0,1.0);
   playSettings.cheapSearchVisits = cfg.getInt("cheapSearchVisits",1,10000000);
   playSettings.cheapSearchTargetWeight = cfg.getFloat("cheapSearchTargetWeight",0.0f,1.0f);
+  playSettings.endgameFullSearchPieces =
+    cfg.contains("endgameFullSearchPieces") ? cfg.getInt("endgameFullSearchPieces",0,32) : 0;
+  playSettings.endgameVisitsBoost =
+    cfg.contains("endgameVisitsBoost") ? cfg.getDouble("endgameVisitsBoost",1.0,16.0) : 1.0;
+  playSettings.endgameCountCurriculumProb =
+    cfg.contains("endgameCountCurriculumProb") ? cfg.getDouble("endgameCountCurriculumProb",0.0,1.0) : 0.0;
   playSettings.reduceVisits = cfg.getBool("reduceVisits");
   playSettings.reduceVisitsThreshold = cfg.getDouble("reduceVisitsThreshold",0.0,0.999999);
   playSettings.reduceVisitsThresholdLookback = cfg.getInt("reduceVisitsThresholdLookback",0,1000);

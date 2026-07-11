@@ -430,6 +430,13 @@ Hash128 Board::getSitHash(Player pla) const {
   h ^= Board::ZOBRIST_PLAYER_HASH[pla];
   return h;
 }
+
+void Board::setMovenumslc(int n) {
+  assert(n >= 0 && n < MAX_MOVE_NUM);
+  pos_hash ^= ZOBRIST_MOVENUMSLC_HASH[movenumslc];
+  movenumslc = n;
+  pos_hash ^= ZOBRIST_MOVENUMSLC_HASH[movenumslc];
+}
 Hash128 Board::getSitHashNoStage(Player pla) const {
   Hash128 h = pos_hash;
   h ^= Board::ZOBRIST_PLAYER_HASH[pla];

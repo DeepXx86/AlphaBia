@@ -52,6 +52,9 @@ namespace NNInputs {
   const int NUM_FEATURES_SPATIAL_V201 = 48;
   const int NUM_FEATURES_GLOBAL_V201 = 64;
 
+  const int NUM_FEATURES_SPATIAL_V202 = 48;
+  const int NUM_FEATURES_GLOBAL_V202 = 64;
+
   Hash128 getHash(
     const Board& board, const BoardHistory& boardHistory, Player nextPlayer,
     const MiscNNInputParams& nnInputParams
@@ -63,6 +66,11 @@ namespace NNInputs {
   );
   
   void fillRowV201(
+    const Board& board, const BoardHistory& boardHistory, Player nextPlayer,
+    const MiscNNInputParams& nnInputParams, int nnXLen, int nnYLen, bool useNHWC, float* rowBin, float* rowGlobal
+  );
+
+  void fillRowV202(
     const Board& board, const BoardHistory& boardHistory, Player nextPlayer,
     const MiscNNInputParams& nnInputParams, int nnXLen, int nnYLen, bool useNHWC, float* rowBin, float* rowGlobal
   );

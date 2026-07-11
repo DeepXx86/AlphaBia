@@ -916,3 +916,43 @@ void NNInputs::fillRowV201(
   // noResultUtilityForWhite
   rowGlobal[25] = pla == C_WHITE ? nnInputParams.noResultUtilityForWhite : -nnInputParams.noResultUtilityForWhite;
 }
+
+void NNInputs::fillRowV202(
+  const Board& board,
+  const BoardHistory& hist,
+  Player nextPlayer,
+  const MiscNNInputParams& nnInputParams,
+  int nnXLen,
+  int nnYLen,
+  bool useNHWC,
+  float* rowBin,
+  float* rowGlobal) {
+  static_assert(NUM_FEATURES_SPATIAL_V202 == NUM_FEATURES_SPATIAL_V201, "");
+  static_assert(NUM_FEATURES_GLOBAL_V202 == NUM_FEATURES_GLOBAL_V201, "");
+  fillRowV201(board, hist, nextPlayer, nnInputParams, nnXLen, nnYLen, useNHWC, rowBin, rowGlobal);
+
+  GameLogic::MakrukCountState count = GameLogic::getMakrukCountState(board);
+  if(!count.active)
+    return;
+
+  rowGlobal[32] = 1.0f;
+  rowGlobal[33] = count.loneKingCount ? 1.0f : 0.0f;
+  rowGlobal[34] = (count.countedSide != C_EMPTY && count.countedSide == nextPlayer) ? 1.0f : 0.0f;
+  rowGlobal[35] = (count.countedSide != C_EMPTY && count.countedSide == getOpp(nextPlayer)) ? 1.0f : 0.0f;
+  rowGlobal[36] = std::min(1.0f, (float)count.limitPlies / 128.0f);
+  rowGlobal[37] = count.limitPlies > 0
+    ? std::min(1.0f, (float)count.usedPlies / (float)count.limitPlies)
+    : 1.0f;
+  rowGlobal[38] = std::min(1.0f, (float)count.remainingPlies / 128.0f);
+  rowGlobal[39] = (float)exp(-count.remainingPlies / 32.0);
+  rowGlobal[40] = (float)exp(-count.remainingPlies / 16.0);
+  rowGlobal[41] = (float)exp(-count.remainingPlies / 8.0);
+  rowGlobal[42] = (float)exp(-count.remainingPlies / 4.0);
+  if(count.countClass == 8)        rowGlobal[43] = 1.0f;
+  else if(count.countClass == 16)  rowGlobal[44] = 1.0f;
+  else if(count.countClass == 22)  rowGlobal[45] = 1.0f;
+  else if(count.countClass == 32)  rowGlobal[46] = 1.0f;
+  else if(count.countClass == 44)  rowGlobal[47] = 1.0f;
+  else if(count.countClass == 64)  rowGlobal[48] = 1.0f;
+  else if(count.countClass == 128) rowGlobal[49] = 1.0f;
+}

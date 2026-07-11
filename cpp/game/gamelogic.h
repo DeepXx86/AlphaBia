@@ -47,8 +47,22 @@ namespace GameLogic {
   MovePriority getMovePriorityAssumeLegal(const Board& board, const BoardHistory& hist, Player pla, Loc loc);
   MovePriority getMovePriority(const Board& board, const BoardHistory& hist, Player pla, Loc loc);
 
-  //C_EMPTY = draw, C_WALL = not finished 
+  //C_EMPTY = draw, C_WALL = not finished
   Color checkWinnerAfterPlayed(const Board& board, const BoardHistory& hist, Player pla, Loc loc);
+
+  struct MakrukCountState {
+    bool active;          
+    bool loneKingCount;  
+    Player countedSide;  
+    int countClass;       
+    int limitPlies;       
+    int usedPlies;        
+    int remainingPlies;   
+    MakrukCountState()
+      : active(false), loneKingCount(false), countedSide(C_EMPTY),
+        countClass(0), limitPlies(0), usedPlies(0), remainingPlies(0) {}
+  };
+  MakrukCountState getMakrukCountState(const Board& board);
 
 
   //some results calculated before calculating NN
