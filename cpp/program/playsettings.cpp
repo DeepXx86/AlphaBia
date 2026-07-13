@@ -10,6 +10,7 @@ PlaySettings::PlaySettings()
     randomInitPieceDensity(0.02),
     randomMovePieceRate(0.5),
    cheapSearchProb(0),cheapSearchVisits(0),cheapSearchTargetWeight(0.0f),
+   startFENsFile(),startFENsProb(0.0),
    endgameFullSearchPieces(0),endgameVisitsBoost(1.0),endgameCountCurriculumProb(0.0),
    reduceVisits(false),reduceVisitsThreshold(100.0),reduceVisitsThresholdLookback(1),reducedVisitsMin(0),reducedVisitsWeight(1.0f),
    policySurpriseDataWeight(0.0),valueSurpriseDataWeight(0.0),scaleDataWeight(1.0),
@@ -74,6 +75,10 @@ PlaySettings PlaySettings::loadForSelfplay(ConfigParser& cfg) {
   playSettings.cheapSearchProb = cfg.getDouble("cheapSearchProb",0.0,1.0);
   playSettings.cheapSearchVisits = cfg.getInt("cheapSearchVisits",1,10000000);
   playSettings.cheapSearchTargetWeight = cfg.getFloat("cheapSearchTargetWeight",0.0f,1.0f);
+  playSettings.startFENsFile =
+    cfg.contains("startFENsFile") ? cfg.getString("startFENsFile") : "";
+  playSettings.startFENsProb =
+    cfg.contains("startFENsProb") ? cfg.getDouble("startFENsProb",0.0,1.0) : 0.0;
   playSettings.endgameFullSearchPieces =
     cfg.contains("endgameFullSearchPieces") ? cfg.getInt("endgameFullSearchPieces",0,32) : 0;
   playSettings.endgameVisitsBoost =

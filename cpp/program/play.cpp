@@ -1271,7 +1271,10 @@ FinishedGameData* Play::runGame(
       }
     }
   };
-  if(gameRand.nextBool(playSettings.randomInitPieceProb))
+  bool startedFromFENFile = false;
+  if(!playSettings.startFENsFile.empty() && gameRand.nextBool(playSettings.startFENsProb))
+    startedFromFENFile = RandomOpening::initializeFromFENFile(board, hist, pla, gameRand, playSettings);
+  if(!startedFromFENFile && gameRand.nextBool(playSettings.randomInitPieceProb))
     RandomOpening::initializeRandomOpening(botB,botW, board, hist, pla, gameRand, playSettings);
 
   if(playSettings.initGamesWithPolicy && otherGameProps.allowPolicyInit) {

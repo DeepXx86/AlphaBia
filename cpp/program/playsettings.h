@@ -27,6 +27,9 @@ struct PlaySettings {
   double endgameVisitsBoost;
   double endgameCountCurriculumProb;
 
+  std::string startFENsFile;
+  double startFENsProb;
+
   //Attenuate the number of visits used in positions where one player or the other is extremely winning
   bool reduceVisits;
   double reduceVisitsThreshold; //When mcts value is more extreme than this

@@ -20,6 +20,34 @@ def engine_sq_to_std(coord):
 # rank flip 9-r is its own inverse, so std->engine is the same transform
 std_sq_to_engine = engine_sq_to_std
 
+def harvest_fail_positions(trace, who, why, path, offsets=(16, 40, 80), cap=20000):
+    if not (who == "fsf" or (who == "draw" and
+            (why.startswith("count_draw") or why.startswith("max_move_draw")))):
+        return 0
+    lines = []
+    for off in offsets:
+        if len(trace) <= off:
+            continue
+        fen = trace[len(trace) - 1 - off].get("fen_before")
+        if not fen:
+            continue
+        f = fen.split()
+        eb, es = std_fen_to_engine(fen)
+        slc = int(f[4]) if len(f) >= 5 and f[4].isdigit() else 0
+        lines.append(f"{eb} {es} {min(slc, 400)}")
+    if not lines:
+        return 0
+    existing = []
+    if os.path.exists(path):
+        with open(path) as fh:
+            existing = [l.strip() for l in fh if l.strip()]
+    seen = set(existing)
+    added = [l for l in lines if l not in seen and not seen.add(l)]
+    merged = (existing + added)[-cap:]
+    with open(path, "w") as fh:
+        fh.write("\n".join(merged) + "\n")
+    return len(added)
+
 class Gtp:
     def __init__(self, argv):
         self.p = subprocess.Popen(argv, stdin=PIPE, stdout=PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1)
@@ -221,6 +249,10 @@ def main():
         with open(os.path.join(pgn_dir, f"game{g+1}_trace.json"), "w") as tf:
             _json.dump({"result": who, "reason": why, "plies": trace}, tf, indent=1)
         results.append((who, why))
+        fails_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fail_positions.txt")
+        n_harvested = harvest_fail_positions(trace, who, why, fails_path)
+        if n_harvested:
+            print(f"  [curriculum] harvested {n_harvested} position(s) -> {fails_path}")
         if who == "kata": score["kata"] += 1
         elif who == "fsf": score["fsf"] += 1
         else: score["kata"] += 0.5; score["fsf"] += 0.5

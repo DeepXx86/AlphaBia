@@ -1,5 +1,11 @@
 #include "../game/randomopening.h"
 
+#include <algorithm>
+#include <fstream>
+#include <map>
+#include <mutex>
+#include <sstream>
+
 #include "../core/rand.h"
 #include "../game/board.h"
 #include "../game/gamelogic.h"
@@ -92,18 +98,97 @@ void RandomOpening::initializeRandomOpening(
     if(!GameLogic::hasAnyLegalMove(b, pla))
       continue;
 
+    Rules gameRules = rules;
     if(playSettings.endgameCountCurriculumProb > 0.0 &&
        gameRand.nextBool(playSettings.endgameCountCurriculumProb)) {
       GameLogic::MakrukCountState count = GameLogic::getMakrukCountState(b);
       if(count.active && count.limitPlies >= 4) {
         int used = (int)gameRand.nextUInt((uint32_t)(count.limitPlies - 2));
         b.setMovenumslc(used);
+        if(gameRules.maxmovesNoCapture != 0 && used + 40 > gameRules.maxmovesNoCapture)
+          gameRules.maxmovesNoCapture = std::min(400, used + 40);
       }
     }
 
     board = b;
     nextPlayer = pla;
-    hist = BoardHistory(board, pla, rules);
+    hist = BoardHistory(board, pla, gameRules);
     return;
   }
+}
+
+namespace {
+  struct FENEntry {
+    std::string fen;
+    Player pla;
+    int slc;
+  };
+  std::mutex fenCacheMutex;
+  std::map<std::string, std::vector<FENEntry>> fenCache;
+
+  const std::vector<FENEntry>& loadFENFile(const std::string& path) {
+    std::lock_guard<std::mutex> lock(fenCacheMutex);
+    auto it = fenCache.find(path);
+    if(it != fenCache.end())
+      return it->second;
+    std::vector<FENEntry>& out = fenCache[path];
+    std::ifstream in(path);
+    std::string line;
+    while(std::getline(in, line)) {
+      while(!line.empty() && (line.back() == '\r' || line.back() == '\n'))
+        line.pop_back();
+      std::istringstream ss(line);
+      FENEntry e;
+      std::string plaStr, slcStr;
+      if(!(ss >> e.fen >> plaStr >> slcStr))
+        continue;
+      if(plaStr == "w" || plaStr == "W") e.pla = P_BLACK;
+      else if(plaStr == "b" || plaStr == "B") e.pla = P_WHITE;
+      else continue;
+      try { e.slc = std::stoi(slcStr); }
+      catch(...) { continue; }
+      if(e.slc < 0 || e.slc > 400)
+        e.slc = 0;
+      out.push_back(e);
+    }
+    return out;
+  }
+}
+
+bool RandomOpening::initializeFromFENFile(
+  Board& board,
+  BoardHistory& hist,
+  Player& nextPlayer,
+  Rand& gameRand,
+  const PlaySettings& playSettings) {
+
+  const std::vector<FENEntry>& entries = loadFENFile(playSettings.startFENsFile);
+  if(entries.empty())
+    return false;
+  const Rules rules = hist.rules;
+
+  for(int attempt = 0; attempt < 50; attempt++) {
+    const FENEntry& e = entries[gameRand.nextUInt((uint32_t)entries.size())];
+    Board b;
+    if(!b.setFEN(e.fen, e.pla))
+      continue;
+    Player pla = e.pla;
+    if(GameLogic::findKing(b, P_BLACK) == Board::NULL_LOC ||
+       GameLogic::findKing(b, P_WHITE) == Board::NULL_LOC)
+      continue;
+    if(GameLogic::isInCheck(b, getOpp(pla)))
+      continue;
+    if(!GameLogic::hasAnyLegalMove(b, pla))
+      continue;
+    b.setMovenumslc(e.slc);
+    Rules gameRules = rules;
+    if(gameRules.maxmovesNoCapture != 0 && e.slc + 40 > gameRules.maxmovesNoCapture)
+      gameRules.maxmovesNoCapture = std::min(400, e.slc + 40);
+
+    board = b;
+    nextPlayer = pla;
+    hist = BoardHistory(board, pla, gameRules);
+    return true;
+  }
+  return false;
 }
