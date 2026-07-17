@@ -28,7 +28,7 @@ def get_num_bin_input_features(config: ModelConfig):
     return 40
   elif version == 102:
     return 32
-  elif version == 201 or version == 202:
+  elif version == 201 or version == 202 or version == 203:
     return 48
   else:
     assert(False)
@@ -39,7 +39,7 @@ def get_num_global_input_features(config: ModelConfig):
     return 28
   elif version == 102:
     return 48
-  elif version == 201 or version == 202:
+  elif version == 201 or version == 202 or version == 203:
     return 64
   else:
     assert(False)

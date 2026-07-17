@@ -25,6 +25,9 @@ static void selfTransposeNCHW(T* src, int n, int c, int h, int w) {
   delete buf;
 }
 
+double TrainingWriteBuffers::winSpeedDiscount = 0.0;
+double TrainingWriteBuffers::winSpeedDiscountFloor = 0.85;
+
 ValueTargets::ValueTargets()
   :win(0),
    loss(0),
@@ -307,8 +310,8 @@ void TrainingWriteBuffers::addRow(
   Rand& rand
 ) {
   (void)finalBoard;
-  static_assert(NNModelVersion::latestInputsVersionImplemented == 202, "");
-  if((inputsVersion < 3 || inputsVersion > 7)&&(inputsVersion!=201)&&(inputsVersion!=202))
+  static_assert(NNModelVersion::latestInputsVersionImplemented == 203, "");
+  if((inputsVersion < 3 || inputsVersion > 7)&&(inputsVersion!=201)&&(inputsVersion!=202)&&(inputsVersion!=203))
     throw StringError("Training write buffers: Does not support input version: " + Global::intToString(inputsVersion));
 
   int posArea = dataXLen*dataYLen;
@@ -325,7 +328,7 @@ void TrainingWriteBuffers::addRow(
     bool inputsUseNHWC = false;
     float* rowBin = binaryInputNCHWUnpacked;
     float* rowGlobal = globalInputNC.data + curRows * numGlobalChannels;
-    static_assert(NNModelVersion::latestInputsVersionImplemented == 202, "");
+    static_assert(NNModelVersion::latestInputsVersionImplemented == 203, "");
     if(inputsVersion == 7) {
       assert(NNInputs::NUM_FEATURES_SPATIAL_V7 == numBinaryChannels);
       assert(NNInputs::NUM_FEATURES_GLOBAL_V7 == numGlobalChannels);
@@ -340,6 +343,11 @@ void TrainingWriteBuffers::addRow(
       assert(NNInputs::NUM_FEATURES_SPATIAL_V202 == numBinaryChannels);
       assert(NNInputs::NUM_FEATURES_GLOBAL_V202 == numGlobalChannels);
       NNInputs::fillRowV202(board, hist, nextPlayer, nnInputParams, dataXLen, dataYLen, inputsUseNHWC, rowBin, rowGlobal);
+    }
+    else if(inputsVersion == 203) {
+      assert(NNInputs::NUM_FEATURES_SPATIAL_V203 == numBinaryChannels);
+      assert(NNInputs::NUM_FEATURES_GLOBAL_V203 == numGlobalChannels);
+      NNInputs::fillRowV203(board, hist, nextPlayer, nnInputParams, dataXLen, dataYLen, inputsUseNHWC, rowBin, rowGlobal);
     }
     else
       ASSERT_UNREACHABLE;
@@ -390,6 +398,13 @@ void TrainingWriteBuffers::addRow(
   int boardArea = board.x_size * board.y_size;
   assert(whiteValueTargetsIdx >= 0 && whiteValueTargetsIdx < whiteValueTargets.size());
   fillValueTDTargets(whiteValueTargets, whiteValueTargetsIdx, nextPlayer, 0.0, rowGlobal);
+  if(winSpeedDiscount > 0.0) {
+    int d = (int)whiteValueTargets.size() - 1 - whiteValueTargetsIdx;
+    double f = std::max(winSpeedDiscountFloor, pow(1.0 - winSpeedDiscount, d));
+    rowGlobal[0] = (float)(rowGlobal[0] * f);
+    rowGlobal[1] = (float)(rowGlobal[1] * f);
+    rowGlobal[2] = (float)(1.0 - rowGlobal[0] - rowGlobal[1]);
+  }
   //These three constants used to be 'nicer' numbers 0.18, 0.06, 0.02, but we screwed up the functional form
   //by omitting the "1.0 +" at the front (breaks scaling to small board sizes), so when we fixed this we also
   //decreased the other numbers slightly to try to maximally limit the impact of the fix on the numerical values
@@ -668,7 +683,7 @@ TrainingDataWriter::TrainingDataWriter(const string& outDir, ostream* dbgOut, in
   int numGlobalChannels;
   //Note that this inputsVersion is for data writing, it might be different than the inputsVersion used
   //to feed into a model during selfplay
-  static_assert(NNModelVersion::latestInputsVersionImplemented == 202, "");
+  static_assert(NNModelVersion::latestInputsVersionImplemented == 203, "");
   if(inputsVersion == 7) {
     numBinaryChannels = NNInputs::NUM_FEATURES_SPATIAL_V7;
     numGlobalChannels = NNInputs::NUM_FEATURES_GLOBAL_V7;

@@ -625,7 +625,10 @@ void NNEvaluator::evaluate(
   buf.boardYSizeForServer = board.y_size;
 
   MiscNNInputParams nnInputParamsWithResultsBeforeNN = nnInputParams;
-  nnInputParamsWithResultsBeforeNN.resultsBeforeNN.init(board, history, nextPlayer);
+  if(inputsVersion == 203)
+    nnInputParamsWithResultsBeforeNN.resultsBeforeNN.initFull(board, history, nextPlayer);
+  else
+    nnInputParamsWithResultsBeforeNN.resultsBeforeNN.init(board, history, nextPlayer);
 
   if(!debugSkipNeuralNet) {
     int rowSpatialLen = NNModelVersion::getNumSpatialFeatures(modelVersion) * nnXLen * nnYLen;
@@ -648,13 +651,15 @@ void NNEvaluator::evaluate(
     }
 
 
-    static_assert(NNModelVersion::latestInputsVersionImplemented == 202, "");
+    static_assert(NNModelVersion::latestInputsVersionImplemented == 203, "");
     if(inputsVersion == 7)
       NNInputs::fillRowV7(board, history, nextPlayer, nnInputParamsWithResultsBeforeNN, nnXLen, nnYLen, inputsUseNHWC, buf.rowSpatial, buf.rowGlobal);
     else if(inputsVersion == 201)
       NNInputs::fillRowV201(board, history, nextPlayer, nnInputParamsWithResultsBeforeNN, nnXLen, nnYLen, inputsUseNHWC, buf.rowSpatial, buf.rowGlobal);
     else if(inputsVersion == 202)
       NNInputs::fillRowV202(board, history, nextPlayer, nnInputParamsWithResultsBeforeNN, nnXLen, nnYLen, inputsUseNHWC, buf.rowSpatial, buf.rowGlobal);
+    else if(inputsVersion == 203)
+      NNInputs::fillRowV203(board, history, nextPlayer, nnInputParamsWithResultsBeforeNN, nnXLen, nnYLen, inputsUseNHWC, buf.rowSpatial, buf.rowGlobal);
     else
       ASSERT_UNREACHABLE;
   }
@@ -776,8 +781,8 @@ void NNEvaluator::evaluate(
 
     //Fix up the value as well. Note that the neural net gives us back the value from the perspective
     //of the player so we need to negate that to make it the white value.
-    static_assert(NNModelVersion::latestModelVersionImplemented == 202, "");
-    if((modelVersion >= 4 && modelVersion <= 11) || modelVersion == 201 || modelVersion == 202) {
+    static_assert(NNModelVersion::latestModelVersionImplemented == 203, "");
+    if((modelVersion >= 4 && modelVersion <= 11) || modelVersion == 201 || modelVersion == 202 || modelVersion == 203) {
       double winProb;
       double lossProb;
       double noResultProb;

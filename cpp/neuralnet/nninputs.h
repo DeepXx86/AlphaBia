@@ -55,6 +55,10 @@ namespace NNInputs {
   const int NUM_FEATURES_SPATIAL_V202 = 48;
   const int NUM_FEATURES_GLOBAL_V202 = 64;
 
+  //V203 = V202 + active ResultsBeforeNN (mate oracle feeds globals 1-5 / plane 39 and value override)
+  const int NUM_FEATURES_SPATIAL_V203 = 48;
+  const int NUM_FEATURES_GLOBAL_V203 = 64;
+
   Hash128 getHash(
     const Board& board, const BoardHistory& boardHistory, Player nextPlayer,
     const MiscNNInputParams& nnInputParams
@@ -71,6 +75,11 @@ namespace NNInputs {
   );
 
   void fillRowV202(
+    const Board& board, const BoardHistory& boardHistory, Player nextPlayer,
+    const MiscNNInputParams& nnInputParams, int nnXLen, int nnYLen, bool useNHWC, float* rowBin, float* rowGlobal
+  );
+
+  void fillRowV203(
     const Board& board, const BoardHistory& boardHistory, Player nextPlayer,
     const MiscNNInputParams& nnInputParams, int nnXLen, int nnYLen, bool useNHWC, float* rowBin, float* rowGlobal
   );

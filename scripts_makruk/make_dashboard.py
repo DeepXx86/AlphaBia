@@ -71,7 +71,17 @@ def load_evals(eval_csv):
                 })
             except (ValueError, KeyError):
                 continue
-    rows.sort(key=lambda r: r["step"])
+    agg = {}
+    for r in rows:
+        k = (r["model"], r["skill"])
+        if k not in agg:
+            agg[k] = dict(r)
+        else:
+            a = agg[k]
+            for f in ("games", "kata", "fsf", "kata_mates", "fsf_mates", "count_draws"):
+                a[f] += r[f]
+            a["ts"] = r["ts"]
+    rows = sorted(agg.values(), key=lambda r: r["step"])
     return rows
 
 def load_elo_matches(base):

@@ -383,3 +383,59 @@ void GameLogic::ResultsBeforeNN::init(const Board&, const BoardHistory&, Color) 
     return;
   inited = true;
 }
+
+static bool moveGivesMate(const Board& board, Player pla, Loc from, Loc to) {
+  Board copy(board);
+  if(copy.stage == 0)
+    copy.playMoveAssumeLegal(from, pla);
+  copy.playMoveAssumeLegal(to, pla);
+  Player opp = getOpp(pla);
+  if(!GameLogic::isInCheck(copy, opp))
+    return false;
+  return !GameLogic::hasAnyLegalMove(copy, opp);
+}
+
+void GameLogic::ResultsBeforeNN::initFull(const Board& board, const BoardHistory& hist, Color nextPlayer) {
+  if(inited)
+    return;
+  inited = true;
+  (void)hist;
+
+  MakrukCountState count = getMakrukCountState(board);
+  if(!(count.active || board.numStonesOnBoard() <= 7))
+    return;
+
+  Player pla = nextPlayer;
+  if(board.stage == 1) {
+    Loc from = board.midLocs[0];
+    std::vector<Loc> dests;
+    getPseudoLegalDests(board, pla, from, dests);
+    for(Loc to : dests) {
+      if(!moveIsKingSafe(board, pla, from, to))
+        continue;
+      if(moveGivesMate(board, pla, from, to)) {
+        winner = pla;
+        return;
+      }
+    }
+    return;
+  }
+
+  for(int y = 0; y < board.y_size; y++)
+    for(int x = 0; x < board.x_size; x++) {
+      Loc from = Location::getLoc(x, y, board.x_size);
+      Color c = board.colors[from];
+      if(c == C_EMPTY || getPiecePla(c) != pla)
+        continue;
+      std::vector<Loc> dests;
+      getPseudoLegalDests(board, pla, from, dests);
+      for(Loc to : dests) {
+        if(!moveIsKingSafe(board, pla, from, to))
+          continue;
+        if(moveGivesMate(board, pla, from, to)) {
+          winner = pla;
+          return;
+        }
+      }
+    }
+}

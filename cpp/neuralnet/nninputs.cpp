@@ -956,3 +956,21 @@ void NNInputs::fillRowV202(
   else if(count.countClass == 64)  rowGlobal[48] = 1.0f;
   else if(count.countClass == 128) rowGlobal[49] = 1.0f;
 }
+
+void NNInputs::fillRowV203(
+  const Board& board,
+  const BoardHistory& hist,
+  Player nextPlayer,
+  const MiscNNInputParams& nnInputParams,
+  int nnXLen,
+  int nnYLen,
+  bool useNHWC,
+  float* rowBin,
+  float* rowGlobal) {
+  static_assert(NUM_FEATURES_SPATIAL_V203 == NUM_FEATURES_SPATIAL_V202, "");
+  static_assert(NUM_FEATURES_GLOBAL_V203 == NUM_FEATURES_GLOBAL_V202, "");
+  MiscNNInputParams params = nnInputParams;
+  if(!params.resultsBeforeNN.inited)
+    params.resultsBeforeNN.initFull(board, hist, nextPlayer);
+  fillRowV202(board, hist, nextPlayer, params, nnXLen, nnYLen, useNHWC, rowBin, rowGlobal);
+}

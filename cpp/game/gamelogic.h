@@ -73,6 +73,8 @@ namespace GameLogic {
     Loc myOnlyLoc;
     ResultsBeforeNN();
     void init(const Board& board, const BoardHistory& hist, Color nextPlayer);
+    //V203: rules-exact endgame oracle (mate-in-1 detection), gated to cheap positions.
+    void initFull(const Board& board, const BoardHistory& hist, Color nextPlayer);
   };
 }
 

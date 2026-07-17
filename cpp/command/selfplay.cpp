@@ -98,6 +98,10 @@ int MainCmds::selfplay(const vector<string>& args) {
   //Max number of games that we will allow to be queued up and not written out
   const int maxDataQueueSize = cfg.getInt("maxDataQueueSize",1,1000000);
   const int maxRowsPerTrainFile = cfg.getInt("maxRowsPerTrainFile",1,100000000);
+  TrainingWriteBuffers::winSpeedDiscount =
+    cfg.contains("winSpeedDiscount") ? cfg.getDouble("winSpeedDiscount",0.0,0.05) : 0.0;
+  TrainingWriteBuffers::winSpeedDiscountFloor =
+    cfg.contains("winSpeedDiscountFloor") ? cfg.getDouble("winSpeedDiscountFloor",0.5,1.0) : 0.85;
   const int maxRowsPerValFile = cfg.getInt("maxRowsPerValFile",1,100000000);
   const double firstFileRandMinProp = cfg.getDouble("firstFileRandMinProp",0.0,1.0);
 

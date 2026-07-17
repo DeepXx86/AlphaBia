@@ -124,34 +124,44 @@ namespace {
     int slc;
   };
   std::mutex fenCacheMutex;
-  std::map<std::string, std::vector<FENEntry>> fenCache;
+  std::map<std::string, std::vector<std::vector<FENEntry>>> fenCache;
 
-  const std::vector<FENEntry>& loadFENFile(const std::string& path) {
+  const std::vector<std::vector<FENEntry>>& loadFENFiles(const std::string& pathList) {
     std::lock_guard<std::mutex> lock(fenCacheMutex);
-    auto it = fenCache.find(path);
+    auto it = fenCache.find(pathList);
     if(it != fenCache.end())
       return it->second;
-    std::vector<FENEntry>& out = fenCache[path];
-    std::ifstream in(path);
-    std::string line;
-    while(std::getline(in, line)) {
-      while(!line.empty() && (line.back() == '\r' || line.back() == '\n'))
-        line.pop_back();
-      std::istringstream ss(line);
-      FENEntry e;
-      std::string plaStr, slcStr;
-      if(!(ss >> e.fen >> plaStr >> slcStr))
-        continue;
-      if(plaStr == "w" || plaStr == "W") e.pla = P_BLACK;
-      else if(plaStr == "b" || plaStr == "B") e.pla = P_WHITE;
-      else continue;
-      try { e.slc = std::stoi(slcStr); }
-      catch(...) { continue; }
-      if(e.slc < 0 || e.slc > 400)
-        e.slc = 0;
-      out.push_back(e);
+    std::vector<std::vector<FENEntry>>& groups = fenCache[pathList];
+    std::istringstream pathStream(pathList);
+    std::string path;
+    while(std::getline(pathStream, path, ',')) {
+      while(!path.empty() && path.front() == ' ') path.erase(path.begin());
+      while(!path.empty() && (path.back() == ' ' || path.back() == '\r')) path.pop_back();
+      if(path.empty()) continue;
+      std::vector<FENEntry> out;
+      std::ifstream in(path);
+      std::string line;
+      while(std::getline(in, line)) {
+        while(!line.empty() && (line.back() == '\r' || line.back() == '\n'))
+          line.pop_back();
+        std::istringstream ss(line);
+        FENEntry e;
+        std::string plaStr, slcStr;
+        if(!(ss >> e.fen >> plaStr >> slcStr))
+          continue;
+        if(plaStr == "w" || plaStr == "W") e.pla = P_BLACK;
+        else if(plaStr == "b" || plaStr == "B") e.pla = P_WHITE;
+        else continue;
+        try { e.slc = std::stoi(slcStr); }
+        catch(...) { continue; }
+        if(e.slc < 0 || e.slc > 400)
+          e.slc = 0;
+        out.push_back(e);
+      }
+      if(!out.empty())
+        groups.push_back(std::move(out));
     }
-    return out;
+    return groups;
   }
 }
 
@@ -162,12 +172,13 @@ bool RandomOpening::initializeFromFENFile(
   Rand& gameRand,
   const PlaySettings& playSettings) {
 
-  const std::vector<FENEntry>& entries = loadFENFile(playSettings.startFENsFile);
-  if(entries.empty())
+  const std::vector<std::vector<FENEntry>>& groups = loadFENFiles(playSettings.startFENsFile);
+  if(groups.empty())
     return false;
   const Rules rules = hist.rules;
 
   for(int attempt = 0; attempt < 50; attempt++) {
+    const std::vector<FENEntry>& entries = groups[gameRand.nextUInt((uint32_t)groups.size())];
     const FENEntry& e = entries[gameRand.nextUInt((uint32_t)entries.size())];
     Board b;
     if(!b.setFEN(e.fen, e.pla))
