@@ -696,6 +696,10 @@ TrainingDataWriter::TrainingDataWriter(const string& outDir, ostream* dbgOut, in
     numBinaryChannels = NNInputs::NUM_FEATURES_SPATIAL_V202;
     numGlobalChannels = NNInputs::NUM_FEATURES_GLOBAL_V202;
   }
+  else if(inputsVersion == 203) {
+    numBinaryChannels = NNInputs::NUM_FEATURES_SPATIAL_V203;
+    numGlobalChannels = NNInputs::NUM_FEATURES_GLOBAL_V203;
+  }
   else {
     throw StringError("TrainingDataWriter: Unsupported inputs version: " + Global::intToString(inputsVersion));
   }
