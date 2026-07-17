@@ -415,6 +415,7 @@ void GameLogic::ResultsBeforeNN::initFull(const Board& board, const BoardHistory
         continue;
       if(moveGivesMate(board, pla, from, to)) {
         winner = pla;
+        myOnlyLoc = to;
         return;
       }
     }
@@ -434,6 +435,7 @@ void GameLogic::ResultsBeforeNN::initFull(const Board& board, const BoardHistory
           continue;
         if(moveGivesMate(board, pla, from, to)) {
           winner = pla;
+          myOnlyLoc = from;
           return;
         }
       }
