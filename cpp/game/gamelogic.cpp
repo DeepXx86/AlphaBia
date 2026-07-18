@@ -401,8 +401,7 @@ void GameLogic::ResultsBeforeNN::initFull(const Board& board, const BoardHistory
   inited = true;
   (void)hist;
 
-  MakrukCountState count = getMakrukCountState(board);
-  if(!(count.active || board.numStonesOnBoard() <= 7))
+  if(board.numStonesOnBoard() > 7)
     return;
 
   Player pla = nextPlayer;

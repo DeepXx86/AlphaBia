@@ -810,21 +810,8 @@ void NNEvaluator::evaluate(
         //  noResultLogits = -5.0;
         //}
         
-        if(resultsBeforeNN.winner == C_EMPTY) {  // draw
-          winProb = 0.0;
-          lossProb = 0.0;
-          noResultProb = 1.0;
-        } 
-        else if(resultsBeforeNN.winner == nextPlayer) {  // next player win
-          winProb = 1.0;
-          lossProb = 0.0;
-          noResultProb = 0.0;
-        } 
-        else if(resultsBeforeNN.winner == getOpp(nextPlayer)) {  // opp win
-          winProb = 0.0;
-          lossProb = 1.0;
-          noResultProb = 0.0;
-        } 
+        if(false) {
+        }
         else { //no sure results
           // Softmax
           double maxLogits = std::max(std::max(winLogits, lossLogits), noResultLogits);
