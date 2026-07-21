@@ -168,6 +168,7 @@ class NNEvaluator {
   bool getDoRandomize() const;
   int getDefaultSymmetry() const;
   void setDoRandomize(bool b);
+  void setUseMateOracleMask(bool b);
   void setDefaultSymmetry(int s);
 
   //Some stats
@@ -230,6 +231,7 @@ class NNEvaluator {
 
   //Randomization settings for symmetries
   bool currentDoRandomize;
+  bool useMateOracleMask = false;
   int currentDefaultSymmetry;
 
   //An array of NNResultBuf** of length numResultBufss, each NNResultBuf** is an array of NNResultBuf* of length maxNumRows.

@@ -341,6 +341,8 @@ vector<NNEvaluator*> Setup::initializeNNEvaluators(
 
     nnEval->spawnServerThreads();
 
+    if(cfg.contains("enableMateOracleMask") && cfg.getBool("enableMateOracleMask"))
+      nnEval->setUseMateOracleMask(true);
     nnEvals.push_back(nnEval);
   }
 

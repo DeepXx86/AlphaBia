@@ -273,6 +273,9 @@ int NNEvaluator::getDefaultSymmetry() const {
   lock_guard<std::mutex> lock(bufferMutex);
   return currentDefaultSymmetry;
 }
+void NNEvaluator::setUseMateOracleMask(bool b) {
+  useMateOracleMask = b;
+}
 void NNEvaluator::setDoRandomize(bool b) {
   lock_guard<std::mutex> lock(bufferMutex);
   currentDoRandomize = b;
@@ -629,6 +632,15 @@ void NNEvaluator::evaluate(
     nnInputParamsWithResultsBeforeNN.resultsBeforeNN.initFull(board, history, nextPlayer);
   else
     nnInputParamsWithResultsBeforeNN.resultsBeforeNN.init(board, history, nextPlayer);
+  //Play-time mate forcing for any model version (cfg enableMateOracleMask; selfplay never sets it).
+  //Kept separate from resultsBeforeNN so older nets never receive oracle INPUT features.
+  GameLogic::ResultsBeforeNN maskOracle;
+  if(useMateOracleMask) {
+    if(inputsVersion == 203)
+      maskOracle = nnInputParamsWithResultsBeforeNN.resultsBeforeNN;
+    else
+      maskOracle.initFull(board, history, nextPlayer);
+  }
 
   if(!debugSkipNeuralNet) {
     int rowSpatialLen = NNModelVersion::getNumSpatialFeatures(modelVersion) * nnXLen * nnYLen;
@@ -714,7 +726,7 @@ void NNEvaluator::evaluate(
     bool isLegal[NNPos::MAX_NN_POLICY_SIZE];
     int legalCount = 0;
 
-    GameLogic::ResultsBeforeNN resultsBeforeNN = nnInputParamsWithResultsBeforeNN.resultsBeforeNN;
+    GameLogic::ResultsBeforeNN resultsBeforeNN = maskOracle;
     if(resultsBeforeNN.myOnlyLoc == Board::NULL_LOC) {
       for(int i = 0; i < policySize; i++) {
         Loc loc = NNPos::posToLoc(i, xSize, ySize, nnXLen, nnYLen);
