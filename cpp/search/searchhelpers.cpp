@@ -123,7 +123,8 @@ void Search::addDirichletNoise(const SearchParams& searchParams, Rand& rand, int
 std::shared_ptr<NNOutput>* Search::maybeAddPolicyNoiseAndTemp(SearchThread& thread, bool isRoot, NNOutput* oldNNOutput) const {
   if(!isRoot)
     return NULL;
-  if(!searchParams.rootNoiseEnabled && searchParams.rootPolicyTemperature == 1.0 && searchParams.rootPolicyTemperatureEarly == 1.0 && rootHintLoc == Board::NULL_LOC)
+  bool noiseEnabledThisRoot = searchParams.rootNoiseEnabled && !(searchParams.rootNoiseOnlyStageZero && rootBoard.stage != 0);
+  if(!noiseEnabledThisRoot && searchParams.rootPolicyTemperature == 1.0 && searchParams.rootPolicyTemperatureEarly == 1.0 && rootHintLoc == Board::NULL_LOC)
     return NULL;
   if(oldNNOutput == NULL)
     return NULL;
@@ -171,7 +172,7 @@ std::shared_ptr<NNOutput>* Search::maybeAddPolicyNoiseAndTemp(SearchThread& thre
     }
   }
 
-  if(searchParams.rootNoiseEnabled) {
+  if(noiseEnabledThisRoot) {
     addDirichletNoise(searchParams, thread.rand, policySize, noisedPolicyProbs);
   }
 

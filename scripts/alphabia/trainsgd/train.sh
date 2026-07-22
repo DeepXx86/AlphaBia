@@ -68,7 +68,7 @@ time python ./train.py \
      -batch-size "$BATCHSIZE" \
      -model-kind "$MODELKIND" \
      -max-epochs-this-instance 1 \
-     -lr-scale 2.0 \
+     -lr-scale 1.0 \
      -samples-per-epoch 1000000 \
      -sub-epochs 1 \
     -soft-policy-weight-scale 8.0 \

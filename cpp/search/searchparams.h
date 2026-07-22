@@ -44,6 +44,7 @@ struct SearchParams {
 
   //Root parameters
   bool rootNoiseEnabled;
+  bool rootNoiseOnlyStageZero; //Skip Dirichlet noise at non-zero-stage roots (destination stage of a two-stage move)
   double rootDirichletNoiseTotalConcentration; //Same as alpha * board size, to match alphazero this might be 0.03 * 361, total number of balls in the urn
   double rootDirichletNoiseWeight; //Policy at root is this weight * noise + (1 - this weight) * nn policy
 

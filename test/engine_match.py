@@ -21,6 +21,9 @@ def engine_sq_to_std(coord):
 std_sq_to_engine = engine_sq_to_std
 
 def harvest_fail_positions(trace, who, why, path, offsets=(16, 40, 80), cap=20000):
+    """Feed lost/count-drawn games back into selfplay as start positions
+    (engine cfg keys: startFENsFile / startFENsProb). Line format matches the
+    engine's loader: '<engine-fen> <w|b> <movenumslc>'."""
     if not (who == "fsf" or (who == "draw" and
             (why.startswith("count_draw") or why.startswith("max_move_draw")))):
         return 0
@@ -267,6 +270,20 @@ def main():
         if "ILLEGAL" in why:
             print("   >>> ILLEGAL MOVE from the net on a correct board = it's the NET, not the web bridge.")
     print(f"\nFINAL  KataGo {score['kata']} - {score['fsf']} Fairy-Stockfish (skill {a.fsf_skill})")
+    n = len(results)
+    w = sum(1 for x, _ in results if x == "kata")
+    l = sum(1 for x, _ in results if x == "fsf")
+    d = n - w - l
+    if n > 0:
+        import math
+        p = (w + 0.5 * d) / n
+        var = (w * (1 - p) ** 2 + d * (0.5 - p) ** 2 + l * (0 - p) ** 2) / n
+        se = math.sqrt(var / n) if n > 1 else 0.5
+        def to_elo(x):
+            x = min(max(x, 1e-3), 1 - 1e-3)
+            return -400.0 * math.log10(1.0 / x - 1.0)
+        lo, hi = to_elo(p - 1.96 * se), to_elo(p + 1.96 * se)
+        print(f"Elo vs this opponent: {to_elo(p):+.0f}  95% CI [{lo:+.0f}, {hi:+.0f}]  (n={n}; CI meaningless below ~30 games)")
     print(f"PGNs saved in: {pgn_dir}")
 
     # Append a machine-readable summary for the training dashboard

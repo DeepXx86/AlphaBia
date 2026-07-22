@@ -31,6 +31,7 @@ SearchParams::SearchParams()
    graphSearchCatchUpLeakProb(0.0),
    //graphSearchCatchUpProp(0.0),
    rootNoiseEnabled(false),
+   rootNoiseOnlyStageZero(false),
    rootDirichletNoiseTotalConcentration(10.83),
    rootDirichletNoiseWeight(0.25),
    rootPolicyTemperature(1.0),
@@ -171,6 +172,7 @@ void SearchParams::printParams(std::ostream& out) {
 
 
   PRINTPARAM(rootNoiseEnabled);
+  PRINTPARAM(rootNoiseOnlyStageZero);
   PRINTPARAM(rootDirichletNoiseTotalConcentration);
   PRINTPARAM(rootDirichletNoiseWeight);
 

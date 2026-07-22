@@ -504,6 +504,9 @@ vector<SearchParams> Setup::loadParams(
     if(cfg.contains("rootNoiseEnabled"+idxStr)) params.rootNoiseEnabled = cfg.getBool("rootNoiseEnabled"+idxStr);
     else if(cfg.contains("rootNoiseEnabled"))   params.rootNoiseEnabled = cfg.getBool("rootNoiseEnabled");
     else                                        params.rootNoiseEnabled = false;
+    if(cfg.contains("rootNoiseOnlyStageZero"+idxStr)) params.rootNoiseOnlyStageZero = cfg.getBool("rootNoiseOnlyStageZero"+idxStr);
+    else if(cfg.contains("rootNoiseOnlyStageZero"))   params.rootNoiseOnlyStageZero = cfg.getBool("rootNoiseOnlyStageZero");
+    else                                              params.rootNoiseOnlyStageZero = false;
     if(cfg.contains("rootDirichletNoiseTotalConcentration"+idxStr))
       params.rootDirichletNoiseTotalConcentration = cfg.getDouble("rootDirichletNoiseTotalConcentration"+idxStr, 0.001, 10000.0);
     else if(cfg.contains("rootDirichletNoiseTotalConcentration"))
