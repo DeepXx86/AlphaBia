@@ -1,0 +1,11 @@
+[Event "KataGo vs Fairy-Stockfish"]
+[Site "local engine match"]
+[Date "2026.07.23"]
+[Variant "Makruk"]
+[White "KataGo"]
+[Black "FairyStockfish(skill20)"]
+[Result "0-1"]
+[FEN "rnsmksnr/8/pppppppp/8/8/PPPPPPPP/8/RNSKMSNR w - - 0 1"]
+[SetUp "1"]
+
+1. Nd2 d5 2. e4 Ne7 3. f4 c5 4. Mf2 Nbc6 5. Sc2 Sd7 6. Ngf3 Kf7 7. b4 Kg7 8. Me3 Sf7 9. g4 g5 10. f5 h5 11. Rg1 Mc7 12. fxe6=M Sfxe6 13. bxc5 bxc5 14. exd5 Nxd5 15. Se2 h4 16. c4 Nde7 17. d4 cxd4 18. Mxd4 Md6 19. Scd3 a5 20. Re1 Rac8 21. Se4 Ng6 22. Se3 Nce7 23. Kc2 Ra8 24. Rab1 Rhd8 25. Rb6 Sc6 26. Rbb1 Rd7 27. Rb6 Mc7 28. Rbb1 Md6 29. Rf1 Rad8 30. Rb6 Rc8 31. Rfb1 Ra8 32. Ne1 Rdd8 33. Nd3 Nf8 34. Rf1 Nd7 35. Rbb1 Rdc8 36. Rbc1 Scd5 37. Kd1 Sxe4 38. Sxe4 Nc6 39. Me3 a4 40. Ke2 Na5 41. Rfd1 Rab8 42. Md4 Mc5 43. Me3 Nb3 44. Rc3 Nxd2 45. Rxd2 Rb3 46. Rc1 Rxa3 47. Sd5 Re8 48. Kf2 Kg6 49. Rdd1 Sxd5 50. cxd5 Rb3 51. Rc4 a3=M 52. Md4 Mab4 53. d6=M Nb6 54. Rcc1 Mxd4 55. Rb1 Rxb1 56. Rxb1 Nd5 57. Re1 Rd8 58. Re6 Kf7 59. Re4 Mbc3 60. Mc5 Mxc5 61. Nxc5 Nf4 62. Ke3 Rd5 63. Nb7 Md2+ 64. Kf3 Rd3+ 65. Kf2 Nxh3+ 66. Ke2 Nf4+ 67. Kd1 Rd5 68. Kc2 h3=M 69. Kb3 Mxg4 70. Kc4 Rd7 71. Nc5 Rc7 72. Rd4 Rxc5+ 73. Kxc5 Ne6+ 74. Kc4 Nxd4 75. Kxd4 Mf3 76. Kc4 Me1 77. Kc5 Ke6 78. Kc6 g4 79. Kc5 Ke7 80. Kb5 Kf7 81. Kc4 Ke6 82. Kb5 g3=M 83. Kc4 f5 84. Kb5 f4 85. Ka4 Kd5 86. Ka5 Kc5 87. Ka4 Me2 88. Ka3 Kb5 89. Kb2 Kb4 90. Ka2 Mgf2 91. Kb2 Md2 92. Kc2 Mc3 93. Kb1 Kb3 94. Ka1 Me1 95. Kb1 Med2 96. Ka1 Md1 97. Kb1 Mc2+ 98. Ka1 Mb2# 0-1

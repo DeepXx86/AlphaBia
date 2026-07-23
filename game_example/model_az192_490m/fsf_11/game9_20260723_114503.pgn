@@ -1,0 +1,11 @@
+[Event "KataGo vs Fairy-Stockfish"]
+[Site "local engine match"]
+[Date "2026.07.23"]
+[Variant "Makruk"]
+[White "KataGo"]
+[Black "FairyStockfish(skill11)"]
+[Result "0-1"]
+[FEN "rnsmksnr/8/pppppppp/8/8/PPPPPPPP/8/RNSKMSNR w - - 0 1"]
+[SetUp "1"]
+
+1. Nd2 h5 2. f4 Kf7 3. e4 c5 4. Mf2 Ne7 5. Me3 Sg7 6. Se2 Sd7 7. Sc2 Mc7 8. Ngf3 d5 9. e5 b5 10. b4 d4 11. cxd4 cxd4 12. Mxd4 Nd5 13. Ne4 Nc6 14. Sc3 h4 15. g4 Nxf4 16. g5 f5 17. Nf6 Rhd8 18. Se3 Nd5 19. Nxd5 exd5 20. Rf1 Rh8 21. a4 Rac8 22. Kc2 Mb6 23. Kd1 bxa4 24. Rxa4 Nb8 25. Ra2 Sf8 26. Scd2 Sc6 27. Ra3 Rc7 28. Rb3 Nd7 29. Ra3 Se7 30. Rxa6 Sb5 31. Ra2 Sxb4 32. Rb2 Ma5 33. Ke1 Nf8 34. Sf4 Rg8 35. Kd1 Rb7 36. Rb1 Rb5 37. Ke2 Ne6 38. Sde3 Rh8 39. Mc3 Sb3 40. Rbd1 Mb4 41. Nd4 Rb6 42. Nxe6 Sxe6 43. Rc1 Mxc3 44. Rxc3 Rb7 45. Rc6 Ra8 46. Rfc1 Ra2+ 47. Kf3 Ke7 48. R1c5 Kf7 49. Sd4 Rd7 50. Sfe3 Rh2 51. Ra6 Sc2 52. Rcc6 Rxh3+ 53. Kf4 Re7 54. Rxc2 Rh1 55. Sf2 Rh2 56. Ra4 Rg2 57. Ra1 Rg4+ 58. Ke3 Sxe5 59. Sxe5 Rxe5+ 60. Kd2 Rxg5 61. Sf3 Re7 62. Rc8 Rg3 63. Sf4 Rg4 64. Rf1 d4 65. Kc1 Ra7 66. Kb1 Rb7+ 67. Kc1 Rb3 68. Rc7+ Ke6 69. Rc5 Ke7 70. Se5 Rc3+ 71. Rxc3 dxc3=M 72. Rf4 Mb4 73. Rc4 Rxc4+ 74. dxc4 h3=M 75. Kc2 Mg4 76. Kd3 Mc5 77. Sd4 Kd6 78. Sxc5+ Kxc5 79. Ke3 g5 80. Kd2 Mf3 81. Kd3 f4 82. Kc3 Mg4 83. Kd3 Mf5 84. Kc3 g4 85. Kd3 Kd6 86. c5+ Kd7 87. c6=M+ Kxc6 88. Kc4 Kd6 89. Kb5 Me6 90. Kc4 Kc6 91. Kd3 g3=M 92. Kc4 Kd6 93. Kb5 Mh2 94. Kc4 Md5+ 95. Kb5 f3=M 96. Kb4 Mg1 97. Kc3 Mf2 98. Kb4 Mg1 99. Kc3 Kc6 100. Kc2 Kc5 101. Kb3 Mc4+ 102. Kc2 Kb5 103. Kc3 Kc5 104. Kc2 Mf2 105. Kc3 Mg4 106. Kb2 Kb4 107. Kc2 Kb5 108. Kb2 Kc6 109. Kc2 Kb6 110. Kc3 Kc5 111. Kb2 Me3 112. Kc2 Kd4 113. Kb2 Mb5 114. Kc2 Mf3 115. Kb1 Kc4 116. Kc2 Kc5 117. Kb1 Kc4 118. Kb2 Mc6 119. Kc2 Me2 120. Kb2 Md2 121. Kc2 Mc3 122. Kb1 Kb3 123. Kc1 Md5 124. Kb1 Md2 125. Ka1 Mc6 126. Kb1 Mb5 127. Ka1 Mc6 128. Kb1 Mf1 129. Ka1 Kc3 130. Ka2 Me3 131. Kb1 Mb7 132. Ka2 Ma6 133. Kb1 Mb5 134. Ka1 Mg2 135. Kb1 Mf1 136. Ka2 Me2 137. Kb1 Md2 138. Ka1 Mc1 139. Ka2 Md3 140. Ka1 Me2 141. Ka2 Md3 142. Ka1 Ma4 143. Ka2 Mb2 144. Kb1 Mc2+ 145. Ka2 Mab3# 0-1
