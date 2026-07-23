@@ -1,0 +1,11 @@
+[Event "KataGo vs Fairy-Stockfish"]
+[Site "local engine match"]
+[Date "2026.07.23"]
+[Variant "Makruk"]
+[White "KataGo"]
+[Black "FairyStockfish(skill8)"]
+[Result "1-0"]
+[FEN "rnsmksnr/8/pppppppp/8/8/PPPPPPPP/8/RNSKMSNR w - - 0 1"]
+[SetUp "1"]
+
+1. Nd2 Nd7 2. Ne2 h5 3. Nd4 Nc5 4. Sc2 Sd7 5. Mf2 Kf7 6. b4 Nb7 7. f4 Ne7 8. e4 Sg7 9. a4 Mc7 10. N4f3 d5 11. e5 a5 12. b5 cxb5 13. axb5 a4 14. Nb1 Ra7 15. Se2 a3=M 16. Rxa3 Raa8 17. Me3 Ra5 18. Sb3 Rxa3 19. Nxa3 Nf5 20. Rg1 Ra8 21. Nc2 Na5 22. Sb4 Nb3 23. g4 Nh6 24. g5 fxg5 25. fxg5 Nf5 26. Rf1 Kg8 27. Na3 Nc5 28. Md4 Ra7 29. Kd2 Se8 30. Se3 Nd7 31. c4 Ra4 32. Nc2 dxc4 33. dxc4 Ne7 34. Kd3 Md8 35. Kc3 Mc7 36. Se4 Ra8 37. c5 Ra7 38. c6=M Nf8 39. Kd3 Ra4 40. Sc3 Md8 41. Me3 Nf5 42. Sb4 Mc7 43. Md4 Ra8 44. Sc3 Ne7 45. Me3 Sh8 46. Ncd4 Ra3 47. h4 Kg7 48. Nc2 Ra8 49. Ncd4 Ng8 50. Sc4 Ra7 51. Kc3 Ne7 52. Kc2 Sf7 53. Kc3 Sh7 54. Mf4 Ra2 55. Scd3 Shg8 56. Kb3 Ra5 57. Sc2 Se8 58. Ne2 Nd7 59. Mxd7 Rxb5+ 60. Kc4 Rc5+ 61. Kd3 Sxd7 62. Me3 Md8 63. Sb3 Nc6 64. Md4 Rb5 65. Kc4 Ra5 66. Sb4 Ra2 67. Nf4 Ra4 68. Mc3 Ra7 69. Sb5 Sf7 70. Sxb6 Ra2 71. Sc5 Mc7 72. Sxc6 Sxc6 73. Nd4 Sd7 74. Rb1 Ra6 75. Nde2 Ra2 76. Kd3 Ra5 77. Rc1 Ra3 78. Ke3 Mb6 79. Rb1 Ra6 80. Rc1 Sfe8 81. Kf2 Mc5 82. Sd3 Sf7 83. Rg1 Ra2 84. Md4 Ra5 85. Rc1 Mb6 86. Rb1 Mc5 87. Mxc5 Rxc5 88. Sd4 Rc7 89. Rb5 Kf8 90. Ra5 Rb7 91. Ra1 Rb3 92. Sc3 Rb5 93. Ra7 Sde8 94. Sd4 Rb6 95. Ra3 Rb1 96. Se3 Rh1 97. Kg3 Re1 98. Kf3 Rd1 99. Ra4 Rb1 100. Nd4 Rf1+ 101. Ke4 Kg8 102. Ra8 Rb1 103. Ra4 Rh1 104. Nf3 Rb1 105. Sd4 Rc1 106. Ne2 Rh1 107. Ra8 Rf1 108. Sc5 Kf8 109. Ke3 Kg7 110. Ra7 Kg8 111. Ra5 Rb1 112. Sd6 Rb3+ 113. Kf2 Rb6 114. Rc5 Rb4 115. Rc1 Kg7 116. Ned4 Kf8 117. Ke3 Kg7 118. Sc7 Rb7 119. Sd6 Rb2 120. Rc7 Kf8 121. Nd2 Ra2 122. Rc8 Ra1 123. N2f3 Kg7 124. Rc7 Ra3+ 125. Ke4 Kg8 126. Rc1 Kg7 127. Nb5 Ra4+ 128. Nfd4 Kh7 129. Rc8 Ra1 130. Kf4 Re1 131. Nf3 Rd1 132. Nbd4 Kg7 133. Rc5 Ra1 134. Ke4 Ra3 135. Nc2 Ra8 136. Rb5 Ra2 137. Rc5 Ra4+ 138. Nfd4 Kh7 139. Kd3 Kg8 140. Rc8 Kf8 141. Rc7 Ra2 142. Ke4 Kg8 143. Rb7 Kf8 144. Kd3 Ra4 145. Ke4 Kg8 146. Rb8 Ra7 147. Nb4 Kh8 148. Nd3 Kg7 149. Rb3 Kh8 150. Rc3 Ra1 151. Rc8 Rh1 152. Sd7 Kg8 153. Sxe8 Sxe8 154. Rxe8+ Kf7 155. Rb8 Ke7 156. Nc5 Rxh4+ 157. Kd3 Kf7 158. Rb7+ Kg8 159. Ne4 Rf4 160. Nf6+ Kf8 161. Nxe6# 1-0

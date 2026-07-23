@@ -1,0 +1,28 @@
+KataGo model: /root/mk192/data/models/az192-s489630976-d48582642/model.bin.gz
+FSF skill 8, KataGo visits 3200
+
+  [final] fen=3R2k1/8/6K1/p7/P7/8/8/8 b - - 10 74 turn=b in_check=True legal=0 plies=147 reason=checkmate result_source=canonical_fsf_board
+Game 1: KataGo(White) -> winner=kata (checkmate), 147 plies  [1-0]  -> /mnt/e/Desktop/Tools/LearnLanguage/cpp/Makruk/test/games/game1_20260723_100621.pgn
+  [final] fen=8/8/8/7p/7P/6k1/8/5r1K w - - 6 73 turn=w in_check=True legal=0 plies=144 reason=checkmate result_source=canonical_fsf_board
+Game 2: KataGo(Black) -> winner=kata (checkmate), 144 plies  [0-1]  -> /mnt/e/Desktop/Tools/LearnLanguage/cpp/Makruk/test/games/game2_20260723_100822.pgn
+  [final] fen=7k/r4SM1/4K1MM/8/8/6m1/8/8 b - 128 1 165 turn=b in_check=True legal=0 plies=329 reason=checkmate result_source=canonical_fsf_board
+Game 3: KataGo(White) -> winner=kata (checkmate), 329 plies  [1-0]  -> /mnt/e/Desktop/Tools/LearnLanguage/cpp/Makruk/test/games/game3_20260723_101353.pgn
+  [final] fen=8/8/8/8/8/km6/3m4/K1r3N1 w - 128 66 132 turn=w in_check=True legal=0 plies=262 reason=checkmate result_source=canonical_fsf_board
+Game 4: KataGo(Black) -> winner=kata (checkmate), 262 plies  [0-1]  -> /mnt/e/Desktop/Tools/LearnLanguage/cpp/Makruk/test/games/game4_20260723_101809.pgn
+  [final] fen=8/8/k1KS4/8/R7/8/8/8 b - 32 16 104 turn=b in_check=True legal=0 plies=207 reason=checkmate result_source=canonical_fsf_board
+Game 5: KataGo(White) -> winner=kata (checkmate), 207 plies  [1-0]  -> /mnt/e/Desktop/Tools/LearnLanguage/cpp/Makruk/test/games/game5_20260723_102113.pgn
+  [final] fen=8/2S5/4p2p/4Pp1P/5Pp1/3k4/3m4/3K1r2 w - - 12 95 turn=w in_check=True legal=0 plies=188 reason=checkmate result_source=canonical_fsf_board
+Game 6: KataGo(Black) -> winner=kata (checkmate), 188 plies  [0-1]  -> /mnt/e/Desktop/Tools/LearnLanguage/cpp/Makruk/test/games/game6_20260723_102423.pgn
+  [final] fen=5k2/1R6/4NNp1/4P1Pp/5r2/3K4/8/8 b - - 0 161 turn=b in_check=True legal=0 plies=321 reason=checkmate result_source=canonical_fsf_board
+Game 7: KataGo(White) -> winner=kata (checkmate), 321 plies  [1-0]  -> /mnt/e/Desktop/Tools/LearnLanguage/cpp/Makruk/test/games/game7_20260723_103013.pgn
+  [final] fen=8/7M/8/8/1p6/6k1/4m3/5r1K w - - 5 105 turn=w in_check=True legal=0 plies=208 reason=checkmate result_source=canonical_fsf_board
+Game 8: KataGo(Black) -> winner=kata (checkmate), 208 plies  [0-1]  -> /mnt/e/Desktop/Tools/LearnLanguage/cpp/Makruk/test/games/game8_20260723_103327.pgn
+  [final] fen=1m1k1R2/8/2S5/2M5/4R3/6KP/8/8 b - - 24 60 turn=b in_check=True legal=0 plies=119 reason=checkmate result_source=canonical_fsf_board
+Game 9: KataGo(White) -> winner=kata (checkmate), 119 plies  [1-0]  -> /mnt/e/Desktop/Tools/LearnLanguage/cpp/Makruk/test/games/game9_20260723_103533.pgn
+  [final] fen=8/8/8/8/2M1M3/8/5kmK/7r w - 128 1 62 turn=w in_check=True legal=0 plies=122 reason=checkmate result_source=canonical_fsf_board
+Game 10: KataGo(Black) -> winner=kata (checkmate), 122 plies  [0-1]  -> /mnt/e/Desktop/Tools/LearnLanguage/cpp/Makruk/test/games/game10_20260723_103725.pgn
+
+FINAL  KataGo 10.0 - 0.0 Fairy-Stockfish (skill 8)
+Elo vs this opponent: +1200  95% CI [+1200, +1200]  (n=10; CI meaningless below ~30 games)
+PGNs saved in: /mnt/e/Desktop/Tools/LearnLanguage/cpp/Makruk/test/games
+Eval history appended: /mnt/e/Desktop/Tools/LearnLanguage/cpp/Makruk/test/eval_history.csv
